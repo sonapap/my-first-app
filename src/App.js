@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from './component/common/Header';
-import Detail from './component/detail/Detail';
+import List from './component/List/List';
 
 const App = () => {
     return (
         <div>
             <Header />
-            <Detail />
+            <List />
         </div>
     )
 }
