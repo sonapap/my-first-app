@@ -58,7 +58,7 @@ class List extends React.Component {
                                    currency.name 
                                 }
 
-                            <div/>
+                            </div>
                         )
                     })
                 }
