@@ -1,4 +1,7 @@
 import React from 'react';
+import { handleResponse } from '../../helpers';
+import './Table.css';
+
 class List extends React.Component {
     constructor() {
         super();
@@ -16,12 +19,7 @@ class List extends React.Component {
     
     
     fetch ('https://api.udilia.com/coins/v1/cryptocurrencies?page=1&perPage=20')
-    .then (response => {
-        return response.json()
-            .then(json => {
-                return response.ok ? json : Promise.reject(json);
-        });
-    })
+    .then (handleResponse)
 
     .then ((data) => {
         this.setState({
@@ -29,15 +27,29 @@ class List extends React.Component {
             currencies: data.currencies
         });
     })
-    // .catch (
-    //     this.setState({
-    //         loading:false,
-    //         error: data.
-    //     })
-    // )
-
-
+   
+    
     }
+    renderChangePercent(percent) {
+        if (percent>0){
+            return (<span className="percent-raised">
+                {percent}&uarr;
+            </span>)}
+            else if(percent<0){
+                return(
+                <span className="percent=fallen">
+                    {percent}&darr;
+                </span>)                    
+        }
+            else {
+                return({percent})
+            }
+    }
+    
+    
+
+
+
     render () {
         const {loading, currencies, error} = this.state;
         if (loading) {
@@ -48,20 +60,53 @@ class List extends React.Component {
             )
         }
         return (
-            <div>
-                <h2>Currencies</h2>
-                {
-                    currencies.map (currency => {
-                        return (
-                            <div key={currency.id}>
-                                {
-                                   currency.name 
-                                }
+            <div className="Table-container">
+                <table className="Table">
+                    <thead className="Table-head">
+                        <tr>
+                            <th>Cryptocurrency</th>
+                            <th>Price</th>
+                            <th>Market Cap</th>
+                            <th>24H Change</th>
+                        </tr>
 
-                            </div>
-                        )
-                    })
-                }
+                    </thead>
+                    <tbody className="Table-body">
+                        {
+                            currencies.map(currency=>{
+                                
+                                return(
+                                    <tr key={currency.id}>
+                                        <td>
+                                            <span className="Table-rank">
+                                                {currency.rank}
+                                            </span>
+                                               
+                                            <span>
+                                                {currency.name}
+                                            </span>
+                                        </td>
+
+                                        <td>$
+                                            <span className="Table-dollar">
+                                                {currency.price}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="Table-dollar">
+                                                {currency.marketCap}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {this.renderChangePercent(currency.percentChange24h)}
+                                        </td>
+
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
             </div>
             )
         }
