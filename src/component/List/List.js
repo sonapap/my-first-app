@@ -1,6 +1,7 @@
 import React from 'react';
 import { handleResponse } from '../../helpers';
-import Table from './Table'
+import { API_URL } from './../../config';
+import Table from './Table';
 import './Table.css';
 
 class List extends React.Component {
@@ -15,46 +16,47 @@ class List extends React.Component {
 
     componentDidMount() {
         this.setState({
-            loading:true
+            loading: true
         })
-    
-    
-    fetch ('https://api.udilia.com/coins/v1/cryptocurrencies?page=1&perPage=20')
-    .then (handleResponse)
 
-    .then ((data) => {
-        this.setState({
-            loading: false,
-            currencies: data.currencies
-        });
-    })
-   
-    
+
+        fetch(`${API_URL}/cryptocurrencies?page=1&perPage=20`)
+            .then(handleResponse)
+
+            .then((data) => {
+                this.setState({
+                    loading: false,
+                    currencies: data.currencies
+                });
+            })
+
+
     }
     renderChangePercent(percent) {
-        if (percent>0){
+        if (percent > 0) {
             return (<span className="percent-raised">
                 {percent}&uarr;
-            </span>)}
-            else if(percent<0){
-                return(
+            </span>)
+        }
+        else if (percent < 0) {
+            return (
                 <span className="percent-fallen">
                     {percent}&darr;
-                </span>)                    
+                </span>)
         }
-            else {
-                return({percent})
-            }
+        else {
+            return ({ percent })
+        }
     }
-    
-    
 
 
 
-    render () {
-        const {loading, currencies, error} = this.state;
+
+
+    render() {
+        const { loading, currencies, error } = this.state;
         if (loading) {
-            return(
+            return (
                 <div>
                     Loading..............
                 </div>
@@ -63,7 +65,7 @@ class List extends React.Component {
         return (
             <Table currencies={this.state.currencies} renderChangePercent={this.renderChangePercent} />
         )
-        }
+    }
 }
 
 export default List
