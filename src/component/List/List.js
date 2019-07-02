@@ -1,5 +1,6 @@
 import React from 'react';
 import { handleResponse } from '../../helpers';
+import Table from './Table'
 import './Table.css';
 
 class List extends React.Component {
@@ -37,7 +38,7 @@ class List extends React.Component {
             </span>)}
             else if(percent<0){
                 return(
-                <span className="percent=fallen">
+                <span className="percent-fallen">
                     {percent}&darr;
                 </span>)                    
         }
@@ -60,55 +61,8 @@ class List extends React.Component {
             )
         }
         return (
-            <div className="Table-container">
-                <table className="Table">
-                    <thead className="Table-head">
-                        <tr>
-                            <th>Cryptocurrency</th>
-                            <th>Price</th>
-                            <th>Market Cap</th>
-                            <th>24H Change</th>
-                        </tr>
-
-                    </thead>
-                    <tbody className="Table-body">
-                        {
-                            currencies.map(currency=>{
-                                
-                                return(
-                                    <tr key={currency.id}>
-                                        <td>
-                                            <span className="Table-rank">
-                                                {currency.rank}
-                                            </span>
-                                               
-                                            <span>
-                                                {currency.name}
-                                            </span>
-                                        </td>
-
-                                        <td>$
-                                            <span className="Table-dollar">
-                                                {currency.price}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="Table-dollar">
-                                                {currency.marketCap}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {this.renderChangePercent(currency.percentChange24h)}
-                                        </td>
-
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
-            </div>
-            )
+            <Table currencies={this.state.currencies} renderChangePercent={this.renderChangePercent} />
+        )
         }
 }
 
