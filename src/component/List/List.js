@@ -2,7 +2,8 @@ import React from 'react';
 import { handleResponse } from '../../helpers';
 import { API_URL } from './../../config';
 import Table from './Table';
-import './Table.css';
+import Pagination from './Pagination';
+
 
 class List extends React.Component {
     constructor() {
@@ -11,27 +12,38 @@ class List extends React.Component {
             loading: false,
             currencies: [],
             error: null,
+            totalPages: 0,
+            page: 1
         }
     }
 
     componentDidMount() {
+       this.fetchCurrencies()
+    }
+
+    fetchCurrencies() {
         this.setState({
             loading: true
         })
 
-
-        fetch(`${API_URL}/cryptocurrencies?page=1&perPage=20`)
+        const { page } = this.state;
+        fetch(`${API_URL}/cryptocurrencies?page=${page}&perPage=20`)
             .then(handleResponse)
 
             .then((data) => {
                 this.setState({
                     loading: false,
-                    currencies: data.currencies
+                    currencies: data.currencies,
+                    totalPages: data.totalPages
                 });
+                console.log(data)
             })
 
 
     }
+
+
+
     renderChangePercent(percent) {
         if (percent > 0) {
             return (<span className="percent-raised">
@@ -50,11 +62,22 @@ class List extends React.Component {
     }
 
 
-
+    handlePaginationClick = direction => {
+        let nextPage = this.state.page;
+        nextPage = direction === 'next' ? nextPage + 1 : nextPage - 1
+        this.setState({
+            page: nextPage
+        },
+        () => {
+            this.fetchCurrencies()
+        })
+        
+    }
 
 
     render() {
-        const { loading, currencies, error } = this.state;
+        const { loading, currencies, error, page, totalPages } = this.state;
+        console.log(this.state)
         if (loading) {
             return (
                 <div>
@@ -63,7 +86,18 @@ class List extends React.Component {
             )
         }
         return (
-            <Table currencies={this.state.currencies} renderChangePercent={this.renderChangePercent} />
+            <div>
+                <Table
+                    currencies={currencies}
+                    renderChangePercent={this.renderChangePercent}
+
+                />
+                <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    handlePaginationClick={this.handlePaginationClick}
+                />
+            </div>
         )
     }
 }
