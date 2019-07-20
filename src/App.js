@@ -1,31 +1,23 @@
 import React from 'react';
-import Header from './component/common/Header';
-import List from './component/List/List';
-import ComponentLife from './component/Lifecycle/ComponentLife';
-import NavBar from './component/NavBar/NavBar';
-import About from './component/About/About';
-import Home from './component/Home/Home';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
-import NotFound from './component/NotFound/NotFound';
-
+import Header from './components/common/Header';
+import List from './components/List/List';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import NotFound from './components/notFound/NotFound';
+import Detail from './components/detail/Detail';
 
 const App = () => {
     return (
         <div>
             <BrowserRouter>
-                <Header />
-                <NavBar />
-                
-                <Switch>
-                    <Route path='/about' component={About} />
-                    <Route path='/list' component={List} />
-                    <Route path='/home' component={Home} />
-                    <Route component={NotFound} />
-                </Switch>
-
+                <div>
+                    <Header />
+                    <Switch>
+                        <Route path="/" component={List} exact />
+                        <Route path="/currency/:id" component={Detail} />
+                        <Route component={NotFound} />
+                    </Switch>
+                </div>
             </BrowserRouter>
-
-
         </div>
     )
 }

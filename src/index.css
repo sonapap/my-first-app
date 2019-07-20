@@ -56,3 +56,8 @@ body {
 input::-ms-clear {
   display: none;
 }
+
+
+a{
+  color: white;
+}
