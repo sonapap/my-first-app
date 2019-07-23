@@ -2,6 +2,7 @@ import React from 'react';
 import { handleResponce } from '../../helpers';
 import Loading from './Loading';
 import { API_URL } from '../../config';
+import { withRouter } from 'react-router-dom';
 import './search.css'
 
 class Search extends React.Component {
@@ -39,6 +40,14 @@ class Search extends React.Component {
 
     }
 
+    handleRedirect(currencyId) {
+        console.log(currencyId)
+        this.props.history.push(`/currency/${currencyId}`)
+        this.setState({
+            searchQuery: '',
+            searchResult: ''
+        })
+    }
 
     renderSearchResult() {
         const { searchQuery, searchResult, loading } = this.state
@@ -53,6 +62,7 @@ class Search extends React.Component {
                             <div
                                 key={item.id}
                                 className="Search-result"
+                                onClick={() => this.handleRedirect(item.id)}
                             >
                                 {item.name} {item.symbol}
                             </div>
@@ -63,22 +73,23 @@ class Search extends React.Component {
             )
         }
 
-       {
+        {
             return (
-                <div className = "Search-result-container">
-                    <div className = "Search-no-result">
-                        <Loading width = "10px" height = "10px"/>
+                <div className="Search-result-container">
+                    <div className="Search-no-result">
+                        <Loading width="10px" height="10px" />
                     </div>
 
                 </div>
             )
-        } 
+        }
 
 
     }
 
 
     render() {
+        console.log(this.props, 'thisprops')
 
         const { searchQuery, loading } = this.state
         return (
@@ -90,6 +101,7 @@ class Search extends React.Component {
                     onChange={this.handleChange}
                     className="Search-input"
                     placeholder="Currency Name"
+                    value={searchQuery}
                 />
                 {loading && <div className="Search-loading">
                     <Loading />
@@ -101,4 +113,4 @@ class Search extends React.Component {
         )
     }
 }
-export default Search;
+export default withRouter(Search);
